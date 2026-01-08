@@ -1,55 +1,129 @@
 package com.example.gym;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Main {
+    static ArrayList<Member> members = new ArrayList<>();
+    static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
 
-        System.out.println("=== Gym Management System ===\n");
+        // Preloaded data for demonstration
+        members.add(new Member(1001, "Aibek", 400000, 5, "General"));
+        members.add(new PremiumMember(2001, "Murat", 600000, 12, true));
+        members.add(new StudentMember(3001, "Dana", 300000, 4, "ENU"));
+        members.add(new PremiumMember(2002, "Aidar", 550000, 7, false));
 
-        // Create objects
-        GymMember member1 = new GymMember(1, "John", 25, "Premium", true);
-        GymMember member2 = new GymMember();
+        int choice;
+        do {
+            showMenu();
+            choice = scanner.nextInt();
 
-        Trainer trainer1 = new Trainer(101, "Alex", "Strength Training", 6);
-        Trainer trainer2 = new Trainer();
+            switch (choice) {
+                case 1 -> addParentMember();
+                case 2 -> addStudent();
+                case 3 -> addPremium();
+                case 4 -> viewAll();
+                case 5 -> demonstratePolymorphism();
+                case 6 -> viewPremiumOnly();
+                case 0 -> System.out.println("Exiting system...");
+                default -> System.out.println("Invalid choice!");
+            }
+        } while (choice != 0);
+    }
 
-        GymSession session1 = new GymSession(5001, "Alex", "Cardio", 75, false);
+    static void showMenu() {
+        System.out.println("========================================");
+        System.out.println(" GYM MANAGEMENT SYSTEM");
+        System.out.println("========================================");
+        System.out.println("1. Add Member (Parent)");
+        System.out.println("2. Add Student Member");
+        System.out.println("3. Add Premium Member");
+        System.out.println("4. View All Members (Polymorphic)");
+        System.out.println("5. Make All Members Work");
+        System.out.println("6. View Premium Members Only");
+        System.out.println("0. Exit");
+        System.out.print("Enter your choice: ");
+    }
 
-        // Display initial objects
-        System.out.println("--- MEMBERS ---");
-        System.out.println(member1);
-        System.out.println(member2);
+    static void addParentMember() {
+        System.out.print("ID: ");
+        int id = scanner.nextInt();
+        System.out.print("Name: ");
+        String name = scanner.next();
+        System.out.print("Fee: ");
+        double fee = scanner.nextDouble();
+        System.out.print("Experience: ");
+        int exp = scanner.nextInt();
 
-        System.out.println("\n--- TRAINERS ---");
-        System.out.println(trainer1);
-        System.out.println(trainer2);
+        members.add(new Member(id, name, fee, exp, "General"));
+    }
 
-        System.out.println("\n--- SESSION ---");
-        System.out.println(session1);
+    static void addStudent() {
+        System.out.print("ID: ");
+        int id = scanner.nextInt();
+        System.out.print("Name: ");
+        String name = scanner.next();
+        System.out.print("Fee: ");
+        double fee = scanner.nextDouble();
+        System.out.print("Experience: ");
+        int exp = scanner.nextInt();
+        System.out.print("University: ");
+        String uni = scanner.next();
 
-        // Test getters
-        System.out.println("\n--- TESTING GETTERS ---");
-        System.out.println("Member name: " + member1.getName());
-        System.out.println("Trainer specialization: " + trainer1.getSpecialization());
-        System.out.println("Session duration: " + session1.getDurationMinutes());
+        members.add(new StudentMember(id, name, fee, exp, uni));
+    }
 
-        // Test setters
-        System.out.println("\n--- TESTING SETTERS ---");
-        member2.setName("Emma");
-        member2.setMembershipType("Basic");
-        member2.setActive(true);
-        System.out.println(member2);
+    static void addPremium() {
+        System.out.print("ID: ");
+        int id = scanner.nextInt();
+        System.out.print("Name: ");
+        String name = scanner.next();
+        System.out.print("Fee: ");
+        double fee = scanner.nextDouble();
+        System.out.print("Experience: ");
+        int exp = scanner.nextInt();
+        System.out.print("Personal trainer (true/false): ");
+        boolean trainer = scanner.nextBoolean();
 
-        // Test additional methods
-        System.out.println("\n--- TESTING METHODS ---");
-        System.out.println("Is premium member: " + member1.isPremiumMember());
+        members.add(new PremiumMember(id, name, fee, exp, trainer));
+    }
 
-        trainer2.addExperience(3);
-        System.out.println("Is senior trainer: " + trainer1.isSeniorTrainer());
+    static void viewAll() {
+        System.out.println("========================================");
+        System.out.println(" ALL MEMBERS (POLYMORPHISM)");
+        System.out.println("========================================");
 
-        session1.completeSession();
-        System.out.println("Session completed: " + session1.isCompleted());
+        int i = 1;
+        for (Member m : members) {
+            System.out.println(i++ + ". " + m.getInfo());
+        }
+    }
 
-        System.out.println("\n=== Program Finished Successfully ===");
+    static void demonstratePolymorphism() {
+        System.out.println("========================================");
+        System.out.println(" POLYMORPHISM DEMONSTRATION");
+        System.out.println("========================================");
+
+        for (Member m : members) {
+            m.work(); // SAME method, DIFFERENT behavior
+        }
+
+        System.out.println("✨ Same method call → different outputs");
+    }
+
+    static void viewPremiumOnly() {
+        System.out.println("========================================");
+        System.out.println(" PREMIUM MEMBERS ONLY");
+        System.out.println("========================================");
+
+        for (Member m : members) {
+            if (m instanceof PremiumMember) { // instanceof
+                PremiumMember p = (PremiumMember) m; // downcasting
+                System.out.println(p.name);
+                p.accessSpa();
+            }
+        }
     }
 }
