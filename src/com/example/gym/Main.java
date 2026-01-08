@@ -110,7 +110,7 @@ public class Main {
             m.work(); // SAME method, DIFFERENT behavior
         }
 
-        System.out.println("✨ Same method call → different outputs");
+        System.out.println("Same method call → different outputs");
     }
 
     static void viewPremiumOnly() {
