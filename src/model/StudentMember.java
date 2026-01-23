@@ -1,10 +1,14 @@
-package com.example.gym;
+package model;
+
+import exception.InvalidInputException;
 
 public class StudentMember extends Member {
+
     private String university;
 
-    public StudentMember(int id, String name, double fee, int experience, String university) {
-        super(id, name, fee, experience, "Student"); // MUST be first
+    public StudentMember(int id, String name, double fee, int experience, String university)
+            throws InvalidInputException {
+        super(id, name, fee, experience, "Student");
         this.university = university;
     }
 
@@ -19,10 +23,7 @@ public class StudentMember extends Member {
     }
 
     public void showDiscount() {
-        System.out.println("Student discount applied");
-    }
-
-    public String getUniversity() {
-        return university;
+        System.out.println("Student discount applied.");
     }
 }
+

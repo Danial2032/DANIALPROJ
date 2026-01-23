@@ -1,9 +1,13 @@
-package com.example.gym;
+package model;
+
+import exception.InvalidInputException;
 
 public class SeniorMember extends Member {
+
     private int age;
 
-    public SeniorMember(int id, String name, double fee, int experience, int age) {
+    public SeniorMember(int id, String name, double fee, int experience, int age)
+            throws InvalidInputException {
         super(id, name, fee, experience, "Senior");
         this.age = age;
     }
@@ -19,11 +23,7 @@ public class SeniorMember extends Member {
     }
 
     public void healthCheck() {
-        System.out.println("Health check completed for senior member");
-    }
-
-    public int getAge() {
-        return age;
+        System.out.println("Health check completed for senior member.");
     }
 }
 
