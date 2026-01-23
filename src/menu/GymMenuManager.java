@@ -53,14 +53,74 @@ public class GymMenuManager implements Menu {
         }
     }
 
-    private void addStudent() throws InvalidInputException {
-        members.add(new StudentMember(1, "Dana", 300000, 3, "ENU"));
-        System.out.println("Student member added.");
+    private void addStudent() {
+        try {
+            System.out.print("ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Name: ");
+            String name = scanner.nextLine();
+
+            System.out.print("Fee: ");
+            double fee = scanner.nextDouble();
+            scanner.nextLine();
+
+            System.out.print("Experience: ");
+            int exp = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("University: ");
+            String university = scanner.nextLine();
+
+            StudentMember student =
+                    new StudentMember(id, name, fee, exp, university);
+
+            members.add(student);
+            System.out.println(" Student member added!");
+
+        } catch (InvalidInputException e) {
+            System.out.println(" Error: " + e.getMessage());
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(" Error: " + e.getMessage());
+        }
     }
 
-    private void addPremium() throws InvalidInputException {
-        members.add(new PremiumMember(2, "Aidar", 600000, 5, true));
-        System.out.println("Premium member added.");
+
+    private void addPremium() {
+        try {
+            System.out.print("ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // clear buffer
+
+            System.out.print("Name: ");
+            String name = scanner.nextLine();
+
+            System.out.print("Fee: ");
+            double fee = scanner.nextDouble();
+            scanner.nextLine();
+
+            System.out.print("Experience: ");
+            int exp = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Personal trainer (true/false): ");
+            boolean personalTrainer = scanner.nextBoolean();
+            scanner.nextLine();
+
+            PremiumMember premium =
+                    new PremiumMember(id, name, fee, exp, personalTrainer);
+
+            members.add(premium);
+            System.out.println(" Premium member added!");
+
+        } catch (InvalidInputException e) {
+            System.out.println(" Error: " + e.getMessage());
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(" Error: " + e.getMessage());
+        }
     }
 
     private void viewAll() {
