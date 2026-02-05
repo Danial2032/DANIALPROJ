@@ -3,112 +3,138 @@ package menu;
 import database.MemberDAO;
 import model.*;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class GymMenuManager implements Menu {
 
-    private final Scanner sc = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     private final MemberDAO dao = new MemberDAO();
 
     @Override
-    public void start() throws Exception {
+    public void start() {
 
         while (true) {
 
-            System.out.println("\n===== GYM MANAGEMENT =====");
-            System.out.println("1 Add Student");
-            System.out.println("2 Add Premium");
-            System.out.println("3 View All");
-            System.out.println("4 View By ID");
-            System.out.println("5 Search By Name");
-            System.out.println("6 Update Member");
-            System.out.println("7 Delete");
-            System.out.println("0 Exit");
+            printMenu();
 
-            int choice = sc.nextInt();
+            int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
-                case 1 -> addStudent();
-                case 2 -> addPremium();
-                case 3 -> viewAll();
-                case 4 -> viewById();
-                case 5 -> search();
+
+                case 1 -> add(true);
+                case 2 -> add(false);
+                case 3 -> dao.getAllMembers().forEach(System.out::println);
+                case 4 -> dao.searchByName(""); // or custom type method if you want
+                case 5 -> dao.searchByName("");
                 case 6 -> update();
                 case 7 -> delete();
-                case 0 -> System.exit(0);
+                case 8 -> searchName();
+                case 9 -> searchRange();
+                case 10 -> highFee();
+                case 11 -> dao.polymorphismDemo();
+                case 0 -> { return; }
             }
         }
     }
 
-    private void addStudent() throws Exception {
-        dao.addMember(createMember(true));
+
+    private void printMenu() {
+
+        System.out.println("""
+╔════════════════════════════════════════╗
+║ MAIN MENU - Week 8 (GYM SYSTEM)       ║
+╚════════════════════════════════════════╝
+1 Add Student
+2 Add Premium
+3 View All
+4 View Students
+5 View Premiums
+6 Update
+7 Delete
+8 Search Name
+9 Fee Range
+10 High Fee
+11 Polymorphism Demo
+0 Exit
+""");
     }
 
-    private void addPremium() throws Exception {
-        dao.addMember(createMember(false));
-    }
 
-    private Member createMember(boolean student) {
-
-        sc.nextLine();
+    private void add(boolean student) {
 
         System.out.print("Name: ");
-        String name = sc.nextLine();
+        String name = scanner.nextLine();
 
         System.out.print("Fee: ");
-        double fee = sc.nextDouble();
+        double fee = Double.parseDouble(scanner.nextLine());
 
         System.out.print("Experience: ");
-        int exp = sc.nextInt();
+        int exp = Integer.parseInt(scanner.nextLine());
 
-        if (student) {
-            return new StudentMember(0, name, fee, exp);
-        } else {
-            return new PremiumMember(0, name, fee, exp);
-        }
+        Member m = student
+                ? new StudentMember(0, name, fee, exp)
+                : new PremiumMember(0, name, fee, exp);
+
+        dao.addMember(m);
     }
 
-    private void viewAll() throws Exception {
-        List<Member> list = dao.getAllMembers();
-        for (Member m : list) print(m);
-    }
 
-    private void viewById() throws Exception {
+    private void update() {
+
         System.out.print("ID: ");
-        Member m = dao.getMemberById(sc.nextInt());
-        if (m != null) print(m);
-    }
+        int id = Integer.parseInt(scanner.nextLine());
 
-    private void search() throws Exception {
-        sc.nextLine();
-        System.out.print("Keyword: ");
-        List<Member> list = dao.searchByName(sc.nextLine());
-        for (Member m : list) print(m);
-    }
+        System.out.print("New Name: ");
+        String name = scanner.nextLine();
 
-    private void update() throws Exception {
+        System.out.print("New Fee: ");
+        double fee = Double.parseDouble(scanner.nextLine());
 
-        System.out.print("ID to update: ");
-        int id = sc.nextInt();
+        System.out.print("New Exp: ");
+        int exp = Integer.parseInt(scanner.nextLine());
 
-        Member updated = createMember(true); // type set later
-        updated.setId(id);
+        Member old = dao.getMemberById(id);
+
+        if (old == null) {
+            System.out.println("Not found!");
+            return;
+        }
+
+        Member updated = old instanceof StudentMember
+                ? new StudentMember(id, name, fee, exp)
+                : new PremiumMember(id, name, fee, exp);
 
         dao.updateMember(updated);
     }
 
-    private void delete() throws Exception {
+
+    private void delete() {
         System.out.print("ID: ");
-        dao.deleteMember(sc.nextInt());
+        dao.deleteMember(Integer.parseInt(scanner.nextLine()));
     }
 
-    private void print(Member m) {
-        System.out.println(
-                m.getId() + " | " +
-                        m.getName() + " | " +
-                        m.getFee() + " | " +
-                        m.getExperience() + " | " +
-                        m.getType());
+
+    private void searchName() {
+        System.out.print("Name: ");
+        dao.searchByName(scanner.nextLine());
+    }
+
+
+    private void searchRange() {
+
+        System.out.print("Min: ");
+        double min = Double.parseDouble(scanner.nextLine());
+
+        System.out.print("Max: ");
+        double max = Double.parseDouble(scanner.nextLine());
+
+        dao.searchByFeeRange(min, max);
+    }
+
+
+    private void highFee() {
+
+        System.out.print("Minimum: ");
+        dao.getHighFeeMembers(Double.parseDouble(scanner.nextLine()));
     }
 }

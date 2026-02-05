@@ -14,25 +14,21 @@ public abstract class Member {
         this.experience = experience;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {   // FIX for update
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public double getFee() {
-        return fee;
-    }
-
-    public int getExperience() {
-        return experience;
-    }
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public double getFee() { return fee; }
+    public int getExperience() { return experience; }
 
     public abstract String getType();
+
+
+
+    @Override
+    public String toString() {
+        return "ID: " + id +
+                " | Name: " + name +
+                " | Fee: " + fee +
+                " | Experience: " + experience +
+                " | Type: " + getType();
+    }
 }
