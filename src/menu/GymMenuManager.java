@@ -24,7 +24,7 @@ public class GymMenuManager implements Menu {
                 case 1 -> add(true);
                 case 2 -> add(false);
                 case 3 -> dao.getAllMembers().forEach(System.out::println);
-                case 4 -> dao.searchByName(""); // or custom type method if you want
+                case 4 -> dao.searchByName("");
                 case 5 -> dao.searchByName("");
                 case 6 -> update();
                 case 7 -> delete();
